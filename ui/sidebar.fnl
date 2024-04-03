@@ -13,7 +13,17 @@
 (local margin (partial widget wibox.container.margin))
 (local align-vertical (partial layout wibox.layout.align.vertical))
 (local fixed-vertical (partial layout wibox.layout.fixed.vertical))
+(local text-clock (partial widget wibox.widget.textclock))
 
+(local time
+       (bg { :bg beautiful.bg_normal}
+         (margin {:margins 5}
+           (fixed-vertical {}
+             (text-clock {:format "%I" :align :center})
+             (text-clock {:format "%M" :align :center})))))
+;
+; (local time-tooltip (awful.tooltip {:objects [time]
+;                                     :timer_function (fn [] (os.date "%A %B %d %Y"))}))
 
 (fn sidebar-widget [screen]
   (margin {:margins (gaps 2)}
@@ -24,7 +34,9 @@
             (create-taglist screen))))
       nil
       (align-vertical {:spacing 10
-                       :bottom 10})))
+                       :bottom 10}
+        time
+        )))
 
   )
 
@@ -32,15 +44,8 @@
   (let [sidebar (awful.popup {
                        : screen
                        :placement (fn [c] ((+ awful.placement.left awful.placement.maximize_vertically) c))
-                       ; :ontop false
-                       ; :visible true
-                       ; :width thickness
-                       ; :height "750"
-                       ; :x  (+ screen.geometry.x (* 2 beautiful.useless_gap))
-                       ; :y  (+ screen.geometry.y (* 2 beautiful.useless_gap))
-                       ; :stretch true
+                       :ontop false
                        :bg "#00000000"
-                       ; :fg beautiful.fg_normal
                        :widget (sidebar-widget screen)
                        })
         ]

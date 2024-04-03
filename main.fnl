@@ -238,8 +238,8 @@
   (->> (theme-path name) 
        beautiful.init))
 
-; (load-theme "dremora")
-(load-theme "hydrangea")
+; (load-theme "hydrangea")
+(load-theme "pining")
 
 ; UI
 (require :ui.titlebar)
