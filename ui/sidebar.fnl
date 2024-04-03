@@ -1,9 +1,11 @@
 (local awful (require "awful"))
+(local gears (require "gears"))
 (local wibox (require "wibox"))
 (local beautiful (require "beautiful"))
 (local {: create-taglist} (require :ui.taglist))
 (local {: layout : widget} (require :ui.nest))
 (local {: notify} (require :helpers))
+(local {: btn} (require :keybinds))
 
 (local dpi beautiful.xresources.apply_dpi)
 (local thickness (dpi 40))
@@ -15,15 +17,31 @@
 (local fixed-vertical (partial layout wibox.layout.fixed.vertical))
 (local text-clock (partial widget wibox.widget.textclock))
 
+(fn square [...]
+  (bg {:bg beautiful.bg_normal}
+    (margin {:margins 5}
+      ...)))
+
 (local time
-       (bg { :bg beautiful.bg_normal}
-         (margin {:margins 5}
-           (fixed-vertical {}
-             (text-clock {:format "%I" :align :center})
-             (text-clock {:format "%M" :align :center})))))
+        (square 
+          (fixed-vertical {}
+            (text-clock {:format "%I" :align :center})
+            (text-clock {:format "%M" :align :center})))) 
 ;
 ; (local time-tooltip (awful.tooltip {:objects [time]
 ;                                     :timer_function (fn [] (os.date "%A %B %d %Y"))}))
+;
+
+
+(fn create-layoutbox [screen]
+  (let [buttons (gears.table.join 
+                  (btn [] 1 #(awful.layout.inc 1)))
+        layoutbox (awful.widget.layoutbox screen)
+        widget (square layoutbox)]
+    (layoutbox:buttons buttons) 
+    widget))
+
+  
 
 (fn sidebar-widget [screen]
   (margin {:margins (gaps 2)}
@@ -33,10 +51,9 @@
           (fixed-vertical {:spacing 5}
             (create-taglist screen))))
       nil
-      (align-vertical {:spacing 10
-                       :bottom 10}
+      (fixed-vertical {:spacing 5}
         time
-        )))
+        (create-layoutbox screen))))
 
   )
 

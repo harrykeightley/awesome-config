@@ -1,4 +1,5 @@
 (local beautiful (require "beautiful"))
+(local gears (require "gears"))
 (local awful (require "awful"))
 (local wibox (require "wibox"))
 (local {: btn} (require :keybinds))
@@ -23,9 +24,10 @@
                                       :fg beautiful.fg_normal
                                       })))
         ;; TODO not working??
-        buttons [(btn [] 1 (fn [t]
+        buttons (gears.table.join 
+                  (btn [] 1 (fn [t]
                              (notify t)
-                             (t:view_only)))]
+                             (t:view_only))))
         taglist (awful.widget.taglist
                   {: screen
                    : widget_template
@@ -33,6 +35,7 @@
                    :filter awful.widget.taglist.filter.all
                    :layout (fixed-vertical {:spacing 5})
                    })]
+    (taglist:buttons buttons)
 
     taglist))
 
