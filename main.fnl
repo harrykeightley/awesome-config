@@ -239,7 +239,8 @@
        beautiful.init))
 
 ; (load-theme "hydrangea")
-(load-theme "pining")
+; (load-theme "pining")
+(load-theme "melange")
 
 ; UI
 (require :ui.titlebar)
